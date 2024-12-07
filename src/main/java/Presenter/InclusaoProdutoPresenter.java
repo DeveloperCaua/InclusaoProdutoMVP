@@ -18,20 +18,19 @@ public class InclusaoProdutoPresenter {
     private Produto produto;
     private final InclusaoProdutoView view;
     private final ProdutoCollection produtos;
-    private final JFrame frame; // Janela que conterá o JPanel
+    private final JFrame frame;
 
     public InclusaoProdutoPresenter(ProdutoCollection produtos) {
         this.produtos = produtos;
 
-        // Criando o frame para conter o JPanel
         this.frame = new JFrame("Inclusão de Produto");
         this.view = new InclusaoProdutoView();
         
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.setContentPane(view); // Adiciona o JPanel ao JFrame
-        frame.pack(); // Ajusta o tamanho da janela ao conteúdo
-        frame.setLocationRelativeTo(null); // Centraliza a janela na tela
-        frame.setVisible(true); // Torna a janela visível
+        frame.setContentPane(view);
+        frame.pack();
+        frame.setLocationRelativeTo(null); 
+        frame.setVisible(true);
 
         configuraView();
     }
