@@ -1,0 +1,5 @@
+Model\ProdutoCollection.class
+Presenter\InclusaoProdutoPresenter.class
+View\InclusaoProdutoView.class
+Model\Produto.class
+Principal\Main.class
