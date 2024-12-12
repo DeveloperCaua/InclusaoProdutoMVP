@@ -4,11 +4,13 @@
  */
 package presenter;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import model.Produto;
 import model.ProdutoCollection;
 import view.InclusaoProdutoView;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -18,34 +20,35 @@ public class InclusaoProdutoPresenter {
     private Produto produto;
     private final InclusaoProdutoView view;
     private final ProdutoCollection produtos;
-    private final JFrame frame; // Janela que conterá o JPanel
 
     public InclusaoProdutoPresenter(ProdutoCollection produtos) {
         this.produtos = produtos;
-
-        // Criando o frame para conter o JPanel
-        this.frame = new JFrame("Inclusão de Produto");
         this.view = new InclusaoProdutoView();
         
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.setContentPane(view); // Adiciona o JPanel ao JFrame
-        frame.pack(); // Ajusta o tamanho da janela ao conteúdo
-        frame.setLocationRelativeTo(null); // Centraliza a janela na tela
-        frame.setVisible(true); // Torna a janela visível
-
+        this.view.setVisible(false);
         configuraView();
+        this.view.setVisible(true);
     }
 
     private void configuraView() {
-        this.view.getBtnIncluir().addActionListener(e -> {
-            try {
-                salvar();
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(frame, ex.getMessage());
+        view.getBtnIncluir().addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    salvar();
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage());
+                }
             }
         });
 
-        this.view.getBtnCancelar().addActionListener(e -> cancelar());
+        
+        view.getBtnCancelar().addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                cancelar();
+            }
+        });
     }
 
     private void salvar() {
@@ -67,13 +70,40 @@ public class InclusaoProdutoPresenter {
         produto = new Produto(nome, precoCusto, percentualLucro);
         produtos.incluir(produto);
    
-        double valorFinal = produto.calcularPrecoVenda();
-        view.setTxtPrecoVenda(valorFinal);
+        double valor = produto.calcularPrecoVenda();
+        String valorFormatado = String.valueOf(valor);
+        view.getTxtPrecoVenda().setText(valorFormatado);
 
-        JOptionPane.showMessageDialog(frame, "Produto incluído com sucesso!");
+        inserirProdutosTabela();
+        JOptionPane.showMessageDialog(view, "Produto incluído com sucesso!");
+        limparCampos();
+    }
+    
+    
+    private void limparCampos(){
+        view.getTxtNome().setText(null);
+        view.getTxtPrecoCusto().setText(null);
+        view.getTxtPercentualLucro().setText(null);
+        view.getTxtPrecoVenda().setText(null);  
+    }
+    
+    private void inserirProdutosTabela(){
+        DefaultTableModel model = (DefaultTableModel) view.getTblProdutos().getModel();
+        model.setRowCount(0);
+        
+        view.getTblProdutos().setModel(model);
+
+            for (Produto produto : produtos.getProdutos()) {
+                model.addRow(new Object[]{
+                    produto.getNome(),
+                    produto.getPrecoCusto(),
+                    produto.getPercentualLucro(),
+                    produto.getPrecoVenda()
+                });
+            }
     }
 
     private void cancelar() {
-        frame.dispose();
+        view.dispose();
     }
 }

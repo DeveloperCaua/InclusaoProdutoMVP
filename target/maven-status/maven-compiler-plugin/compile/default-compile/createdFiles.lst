@@ -1,5 +1,9 @@
+View\InclusaoProdutoView.class
+Presenter\InclusaoProdutoPresenter$2.class
+View\InclusaoProdutoView$1.class
+Presenter\InclusaoProdutoPresenter$1.class
 Model\ProdutoCollection.class
 Presenter\InclusaoProdutoPresenter.class
-View\InclusaoProdutoView.class
 Model\Produto.class
+View\InclusaoProdutoView$2.class
 Principal\Main.class
